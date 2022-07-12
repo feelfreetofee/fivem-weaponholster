@@ -19,10 +19,10 @@ local weaponData = { -- Thanks to https://github.com/itzhapp/ShowWeapon
 			['WEAPON_MARKSMANRIFLE_MK2']		= {model = 'w_sr_marksmanriflemk2',	pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
 			['WEAPON_MG']				= {model = 'w_mg_mg', 			pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
 			['WEAPON_MILITARYRIFLE']		= {model = 'w_sr_marksmanriflemk2',	pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
-			['WEAPON_MUSKET']			= {model = 'w_ar_musket',		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
+			['WEAPON_MUSKET']			= {model = 'w_ar_musket', 		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
 			['WEAPON_MICROSMG'] 			= {model = 'w_sb_microsmg', 		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
-			['WEAPON_SMG_MK2']			= {model = 'w_sb_smgmk2',		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
-			['WEAPON_SMG']				= {model = 'w_sb_smg',			pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
+			['WEAPON_SMG_MK2']			= {model = 'w_sb_smgmk2', 		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
+			['WEAPON_SMG']				= {model = 'w_sb_smg', 			pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
 			['WEAPON_SNIPERRIFLE']			= {model = 'w_sr_sniperrifle', 		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
 			['WEAPON_SPECIALCARBINE_MK2']		= {model = 'w_ar_specialcarbinemk2',	pos = vector3(0.0, 0.0, 0.0),	rot = vector3(0.0, 0.0, 0.0)},
 			['WEAPON_SPECIALCARBINE']     		= {model = 'w_ar_specialcarbine', 	pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
@@ -74,6 +74,16 @@ local weaponData = { -- Thanks to https://github.com/itzhapp/ShowWeapon
 			bone = 57597
 		}
 	},
+	rightThigh = {
+		list = {
+			['WEAPON_COMBATPISTOL']			= {model = 'w_pi_combatpistol',		pos = vector3(0.0, 0.0, 0.0), 	rot = vector3(0.0, 0.0, 0.0)},
+		},
+		coords = {
+			pos = vector3(0.13, 0.02, 0.141),
+			rot = vector3(-100.0, 6.0, 5.0),
+			bone = 51826
+		}
+	},
 }
 
 AddEventHandler('playerDropped', function() -- onResourceStop
@@ -93,14 +103,15 @@ end
 local weaponHolstered = {
 	['back'] = {name = nil, object = nil},
 	['front'] = {name = nil, object = nil},
-	['left'] = {name = nil, object = nil}
+	['left'] = {name = nil, object = nil},
+	['rightThigh'] = {name = nil, object = nil}
 }
 local weaponEquipped = {name = nil, object = nil}
 
 AddEventHandler('ox_inventory:currentWeapon',function(currentWeapon)
-	local playerPed = PlayerPedId()
-	if not currentWeapon then 
-		if weaponEquipped and weaponEquipped.name then
+    local playerPed = PlayerPedId()
+    if not currentWeapon then 
+        if weaponEquipped and weaponEquipped.name then
 			for k in pairs(weaponData) do
 				if weaponData[k].list[weaponEquipped and weaponEquipped.name] then
 					local model = weaponData[k].list[weaponEquipped.name].model
@@ -124,9 +135,9 @@ AddEventHandler('ox_inventory:currentWeapon',function(currentWeapon)
 					SetModelAsNoLongerNeeded(model)
 				end
 			end
-		end
-	else
-        	weaponEquipped.name = currentWeapon.name
+        end
+    else
+        weaponEquipped.name = currentWeapon.name
 		for k in pairs(weaponData) do
 			if currentWeapon.name == weaponHolstered[k].name then
 				DeleteObject(weaponHolstered[k].object)
@@ -134,5 +145,5 @@ AddEventHandler('ox_inventory:currentWeapon',function(currentWeapon)
 				weaponHolstered[k].object = nil
 			end
 		end
-	end
+    end
 end)
